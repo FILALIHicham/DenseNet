@@ -1,0 +1,9 @@
+# Data directories
+data/*
+!data/dataloader.py
+
+# Python cache files
+__pycache__/
+
+# Model checkpoints
+logs/checkpoints/**/*.pth

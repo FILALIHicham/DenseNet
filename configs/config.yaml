@@ -1,0 +1,713 @@
+experiments:
+
+  ######################################################
+  # 1) DenseNet (k=12), L=40, ~1.0M params
+  ######################################################
+  # -- C10 (no aug)
+  - name: DN_k12_L40_C10_noaug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [12, 12, 12]   # L=40 => 12+12+12 =36 conv layers + init
+      num_init_features: 16       
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.2              # Dropout for no augmentation
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]      # 50% & 75% of 300
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L40_C10_noaug
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L40_C10_noaug
+
+  # -- C10+ (with aug)
+  - name: DN_k12_L40_C10_aug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [12, 12, 12]
+      num_init_features: 16
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.0              # No dropout for augmented data
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L40_C10_aug
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L40_C10_aug
+
+  # -- C100 (no aug)
+  - name: DN_k12_L40_C100_noaug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [12, 12, 12]
+      num_init_features: 16
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.2
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L40_C100_noaug
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L40_C100_noaug
+
+  # -- C100+ (with aug)
+  - name: DN_k12_L40_C100_aug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [12, 12, 12]
+      num_init_features: 16
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.0
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L40_C100_aug
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L40_C100_aug
+
+  # -- SVHN
+  - name: DN_k12_L40_SVHN
+    dataset:
+      name: SVHN
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [12, 12, 12]
+      num_init_features: 16
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.2             # Dropout for no augmentation
+      num_classes: 10
+    training:
+      epochs: 40                
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [20, 30]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L40_SVHN
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L40_SVHN
+
+
+  ######################################################
+  # 2) DenseNet (k=12), L=100, ~7.0M params
+  ######################################################
+  # -- C10 (no aug)
+  - name: DN_k12_L100_C10_noaug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [32, 32, 32]  # L=100 => (100 - 4)/3 = 32 layers/block if no bottleneck
+      num_init_features: 16
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.2
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L100_C10_noaug
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L100_C10_noaug
+
+  # -- C10+ (with aug)
+  - name: DN_k12_L100_C10_aug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [32, 32, 32]
+      num_init_features: 16
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.0
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L100_C10_aug
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L100_C10_aug
+
+  # -- C100 (no aug)
+  - name: DN_k12_L100_C100_noaug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [32, 32, 32]
+      num_init_features: 16
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.2
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L100_C100_noaug
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L100_C100_noaug
+
+  # -- C100+ (with aug)
+  - name: DN_k12_L100_C100_aug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [32, 32, 32]
+      num_init_features: 16
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.0
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L100_C100_aug
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L100_C100_aug
+
+  # -- SVHN
+  - name: DN_k12_L100_SVHN
+    dataset:
+      name: SVHN
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [32, 32, 32]
+      num_init_features: 16
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.2
+      num_classes: 10
+    training:
+      epochs: 40
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [20, 30]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k12_L100_SVHN
+      checkpoint_dir: ./logs/checkpoints/DN_k12_L100_SVHN
+
+
+  ######################################################
+  # 3) DenseNet (k=24), L=100, ~27.2M params
+  ######################################################
+  # -- C10 (no aug)
+  - name: DN_k24_L100_C10_noaug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [32, 32, 32]
+      num_init_features: 24
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.2
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k24_L100_C10_noaug
+      checkpoint_dir: ./logs/checkpoints/DN_k24_L100_C10_noaug
+
+  # -- C10+ (with aug)
+  - name: DN_k24_L100_C10_aug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [32, 32, 32]
+      num_init_features: 24
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.0
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k24_L100_C10_aug
+      checkpoint_dir: ./logs/checkpoints/DN_k24_L100_C10_aug
+
+  # -- C100 (no aug)
+  - name: DN_k24_L100_C100_noaug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [32, 32, 32]
+      num_init_features: 24
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.2
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k24_L100_C100_noaug
+      checkpoint_dir: ./logs/checkpoints/DN_k24_L100_C100_noaug
+
+  # -- C100+ (with aug)
+  - name: DN_k24_L100_C100_aug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [32, 32, 32]
+      num_init_features: 24
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.0
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k24_L100_C100_aug
+      checkpoint_dir: ./logs/checkpoints/DN_k24_L100_C100_aug
+
+  # -- SVHN
+  - name: DN_k24_L100_SVHN
+    dataset:
+      name: SVHN
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [32, 32, 32]
+      num_init_features: 24
+      bottleneck: false
+      compression: 1.0
+      drop_rate: 0.2
+      num_classes: 10
+    training:
+      epochs: 40
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [20, 30]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DN_k24_L100_SVHN
+      checkpoint_dir: ./logs/checkpoints/DN_k24_L100_SVHN
+
+
+  ######################################################
+  # 4) DenseNet-BC (k=12), L=100, ~0.8M params
+  ######################################################
+  # For DenseNet-BC: (L - 4)/(2*3) = 16 layers per block
+  # compression=0.5, bottleneck=true
+  # -- C10 (no aug)
+  - name: DNBC_k12_L100_C10_noaug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [16, 16, 16]
+      num_init_features: 24
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.2
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k12_L100_C10_noaug
+      checkpoint_dir: ./logs/checkpoints/DNBC_k12_L100_C10_noaug
+
+  # -- C10+ (with aug)
+  - name: DNBC_k12_L100_C10_aug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [16, 16, 16]
+      num_init_features: 24
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.0
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k12_L100_C10_aug
+      checkpoint_dir: ./logs/checkpoints/DNBC_k12_L100_C10_aug
+
+  # -- C100 (no aug)
+  - name: DNBC_k12_L100_C100_noaug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [16, 16, 16]
+      num_init_features: 24
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.2
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k12_L100_C100_noaug
+      checkpoint_dir: ./logs/checkpoints/DNBC_k12_L100_C100_noaug
+
+  # -- C100+ (with aug)
+  - name: DNBC_k12_L100_C100_aug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [16, 16, 16]
+      num_init_features: 24
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.0
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k12_L100_C100_aug
+      checkpoint_dir: ./logs/checkpoints/DNBC_k12_L100_C100_aug
+
+  # -- SVHN
+  - name: DNBC_k12_L100_SVHN
+    dataset:
+      name: SVHN
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 12
+      block_layers: [16, 16, 16]
+      num_init_features: 24
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.2
+      num_classes: 10
+    training:
+      epochs: 40
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [20, 30]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k12_L100_SVHN
+      checkpoint_dir: ./logs/checkpoints/DNBC_k12_L100_SVHN
+
+
+  ######################################################
+  # 5) DenseNet-BC (k=24), L=250, ~15.3M params
+  ######################################################
+  # For L=250 BC => (250 - 4)/(2*3) = 41 layers per block, approx
+  - name: DNBC_k24_L250_C10_noaug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [41, 41, 41]
+      num_init_features: 48     # often 2*k for BC
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.2
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k24_L250_C10_noaug
+      checkpoint_dir: ./logs/checkpoints/DNBC_k24_L250_C10_noaug
+
+  - name: DNBC_k24_L250_C10_aug
+    dataset:
+      name: CIFAR10
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [41, 41, 41]
+      num_init_features: 48
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.0
+      num_classes: 10
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k24_L250_C10_aug
+      checkpoint_dir: ./logs/checkpoints/DNBC_k24_L250_C10_aug
+
+  - name: DNBC_k24_L250_C100_noaug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [41, 41, 41]
+      num_init_features: 48
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.2
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k24_L250_C100_noaug
+      checkpoint_dir: ./logs/checkpoints/DNBC_k24_L250_C100_noaug
+
+  - name: DNBC_k24_L250_C100_aug
+    dataset:
+      name: CIFAR100
+      batch_size: 64
+      augment: true
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [41, 41, 41]
+      num_init_features: 48
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.0
+      num_classes: 100
+    training:
+      epochs: 300
+    # patience: 25
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [150, 225]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k24_L250_C100_aug
+      checkpoint_dir: ./logs/checkpoints/DNBC_k24_L250_C100_aug
+
+  - name: DNBC_k24_L250_SVHN
+    dataset:
+      name: SVHN
+      batch_size: 64
+      augment: false
+      data_dir: ./data
+      num_workers: 4
+    model:
+      growth_rate: 24
+      block_layers: [41, 41, 41]
+      num_init_features: 48
+      bottleneck: true
+      compression: 0.5
+      drop_rate: 0.2
+      num_classes: 10
+    training:
+      epochs: 40
+      learning_rate: 0.1
+      momentum: 0.9
+      weight_decay: 0.0001
+      milestones: [20, 30]
+      gamma: 0.1
+    logging:
+      log_dir: ./logs/tensorboard/DNBC_k24_L250_SVHN
+      checkpoint_dir: ./logs/checkpoints/DNBC_k24_L250_SVHN
